@@ -1,5 +1,6 @@
 const fs = require('fs');
 const http = require('http');
+const url = require('url');
 
 ////////////////////// sync and async read/write files //////////////////////
 
@@ -29,7 +30,18 @@ const http = require('http');
 ////////////////////// a simple web server //////////////////////
 
 const server = http.createServer((req, res) => {
-	res.end('Hello from the server!');
+	const pathName = req.url;
+	if (pathName === '/overview' || pathName === '/') {
+		res.end('Welcome to the Overview');
+	} else if (pathName === '/product') {
+		res.end('These are the products');
+	} else {
+		res.writeHead(404, {
+			'Content-type': 'text/html',
+			'a-custom-header': 'hello world',
+		});
+		res.end('<h1>Page cannot be found.</h1>');
+	}
 });
 
 server.listen(8000, '127.0.0.1', () => {
