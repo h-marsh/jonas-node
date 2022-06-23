@@ -35,6 +35,8 @@ const server = http.createServer((req, res) => {
 		res.end('Welcome to the Overview');
 	} else if (pathName === '/product') {
 		res.end('These are the products');
+	} else if (pathName === '/api') {
+		res.end('JSON data goes here.');
 	} else {
 		res.writeHead(404, {
 			'Content-type': 'text/html',
