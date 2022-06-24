@@ -29,6 +29,9 @@ const url = require('url');
 
 ////////////////////// a simple web server //////////////////////
 
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const parsedDataObject = JSON.parse(data);
+
 const server = http.createServer((req, res) => {
 	const pathName = req.url;
 	if (pathName === '/overview' || pathName === '/') {
@@ -36,7 +39,10 @@ const server = http.createServer((req, res) => {
 	} else if (pathName === '/product') {
 		res.end('These are the products');
 	} else if (pathName === '/api') {
-		res.end('JSON data goes here.');
+		res.writeHead(200, {
+			'Content-type': 'application/json',
+		});
+		res.end(data);
 	} else {
 		res.writeHead(404, {
 			'Content-type': 'text/html',
