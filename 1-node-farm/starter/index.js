@@ -29,21 +29,51 @@ const url = require('url');
 
 ////////////////////// a simple web server //////////////////////
 
+const templateOverview = fs.readFileSync(
+	`${__dirname}/template/template-overview.html`,
+	'utf-8'
+);
+const templateProduct = fs.readFileSync(
+	`${__dirname}/template/template-product.html`,
+	'utf-8'
+);
+const templateCard = fs.readFileSync(
+	`${__dirname}/template/template-card.html`,
+	'utf-8'
+);
+
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const parsedDataObject = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
 	const pathName = req.url;
+
+	// overview page
 	if (pathName === '/overview' || pathName === '/') {
-		res.end('Welcome to the Overview');
-	} else if (pathName === '/product') {
-		res.end('These are the products');
-	} else if (pathName === '/api') {
+		res.writeHead(200, {
+			'Content-type': 'text/html',
+		});
+		res.end(templateOverview);
+	}
+
+	// product page
+	else if (pathName === '/product') {
+		res.writeHead(200, {
+			'Content-type': 'text/html',
+		});
+		res.end(templateProduct);
+	}
+
+	// api
+	else if (pathName === '/api') {
 		res.writeHead(200, {
 			'Content-type': 'application/json',
 		});
 		res.end(data);
-	} else {
+	}
+
+	// 404 page not found
+	else {
 		res.writeHead(404, {
 			'Content-type': 'text/html',
 			'a-custom-header': 'hello world',
