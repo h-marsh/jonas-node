@@ -62,10 +62,10 @@ const replaceTemplate = function (template, product) {
 };
 
 const server = http.createServer((req, res) => {
-	const pathName = req.url;
+	const { query, pathname } = url.parse(req.url, true);
 
 	// overview page
-	if (pathName === '/overview' || pathName === '/') {
+	if (pathname === '/overview' || pathname === '/') {
 		res.writeHead(200, {
 			'Content-type': 'text/html',
 		});
@@ -80,15 +80,18 @@ const server = http.createServer((req, res) => {
 	}
 
 	// product page
-	else if (pathName === '/product') {
+	else if (pathname === '/product') {
 		res.writeHead(200, {
 			'Content-type': 'text/html',
 		});
-		res.end(templateProduct);
+
+		const product = parsedDataObject[query.id];
+		const output = replaceTemplate(templateProduct, product);
+		res.end(output);
 	}
 
 	// api
-	else if (pathName === '/api') {
+	else if (pathname === '/api') {
 		res.writeHead(200, {
 			'Content-type': 'application/json',
 		});
